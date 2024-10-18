@@ -1,0 +1,181 @@
+{
+  "nodes": [
+    {
+      "id": "maps.google.com",
+      "group": 2
+    },
+    {
+      "id": "142.251.167.100",
+      "group": 3
+    },
+    {
+      "id": "142.251.167.101",
+      "group": 3
+    },
+    {
+      "id": "142.251.167.102",
+      "group": 3
+    },
+    {
+      "id": "142.251.167.113",
+      "group": 3
+    },
+    {
+      "id": "142.251.167.138",
+      "group": 3
+    },
+    {
+      "id": "142.251.167.139",
+      "group": 3
+    },
+    {
+      "id": "google.com",
+      "group": 2
+    },
+    {
+      "id": "172.253.63.100",
+      "group": 3
+    },
+    {
+      "id": "172.253.63.101",
+      "group": 3
+    },
+    {
+      "id": "172.253.63.102",
+      "group": 3
+    },
+    {
+      "id": "172.253.63.113",
+      "group": 3
+    },
+    {
+      "id": "172.253.63.138",
+      "group": 3
+    },
+    {
+      "id": "172.253.63.139",
+      "group": 3
+    },
+    {
+      "id": "gmail.com",
+      "group": 2
+    },
+    {
+      "id": "172.253.122.17",
+      "group": 3
+    },
+    {
+      "id": "172.253.122.18",
+      "group": 3
+    },
+    {
+      "id": "172.253.122.19",
+      "group": 3
+    },
+    {
+      "id": "172.253.122.83",
+      "group": 3
+    },
+    {
+      "id": "google",
+      "group": 1
+    }
+  ],
+  "links": [
+    {
+      "source": "google",
+      "target": "maps.google.com",
+      "value": 1
+    },
+    {
+      "source": "maps.google.com",
+      "target": "142.251.167.100",
+      "value": 1
+    },
+    {
+      "source": "maps.google.com",
+      "target": "142.251.167.101",
+      "value": 1
+    },
+    {
+      "source": "maps.google.com",
+      "target": "142.251.167.102",
+      "value": 1
+    },
+    {
+      "source": "maps.google.com",
+      "target": "142.251.167.113",
+      "value": 1
+    },
+    {
+      "source": "maps.google.com",
+      "target": "142.251.167.138",
+      "value": 1
+    },
+    {
+      "source": "maps.google.com",
+      "target": "142.251.167.139",
+      "value": 1
+    },
+    {
+      "source": "google",
+      "target": "google.com",
+      "value": 1
+    },
+    {
+      "source": "google.com",
+      "target": "172.253.63.100",
+      "value": 1
+    },
+    {
+      "source": "google.com",
+      "target": "172.253.63.101",
+      "value": 1
+    },
+    {
+      "source": "google.com",
+      "target": "172.253.63.102",
+      "value": 1
+    },
+    {
+      "source": "google.com",
+      "target": "172.253.63.113",
+      "value": 1
+    },
+    {
+      "source": "google.com",
+      "target": "172.253.63.138",
+      "value": 1
+    },
+    {
+      "source": "google.com",
+      "target": "172.253.63.139",
+      "value": 1
+    },
+    {
+      "source": "google",
+      "target": "gmail.com",
+      "value": 1
+    },
+    {
+      "source": "gmail.com",
+      "target": "172.253.122.17",
+      "value": 1
+    },
+    {
+      "source": "gmail.com",
+      "target": "172.253.122.18",
+      "value": 1
+    },
+    {
+      "source": "gmail.com",
+      "target": "172.253.122.19",
+      "value": 1
+    },
+    {
+      "source": "gmail.com",
+      "target": "172.253.122.83",
+      "value": 1
+    }
+  ]
+}
