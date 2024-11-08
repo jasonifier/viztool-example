@@ -1,0 +1,93 @@
+body {
+    background: #eeeeee;
+}
+
+#holder {
+    overflow: hidden;
+}
+  
+.timelinechart svg {
+    width: 100%;
+}
+  
+.miniItem {
+    fill: #0072ce;
+    stroke-width: 6;
+}
+  
+.miniItem.future {
+    fill: #448875;
+}
+  
+text.future {
+    fill: #f7b363;
+}
+
+.brush .extent {
+    stroke: #b6b8b9;
+    fill: #57585b;
+    fill-opacity: .365;
+    stroke-width: .2;
+}
+  
+.laneImg {
+    border-radius: 25px;
+}
+  
+.currentLine {
+    stroke-width: 2;
+}
+  
+  
+.axis text {
+    font-size: 12px;
+    font-family: monospace;
+}
+  
+.base.axis text {
+    font-size: 10px;
+    font-family: monospace;
+}
+  
+.laneText {
+    font-size: 12px;
+    font-family: monospace;
+}
+  
+div.tooltip {
+    position: absolute;
+    text-align: left;
+    width: 120px;
+    height: 28px;
+    padding: 2px;
+    font: 12px sans-serif;
+    background: #ffffff;
+    border: 0px;
+    pointer-events: none;
+}
+  
+.noselect {
+    -webkit-touch-callout: none;
+    /* iOS Safari */
+    -webkit-user-select: none;
+    /* Safari */
+    -khtml-user-select: none;
+    /* Konqueror HTML */
+    -moz-user-select: none;
+    /* Old versions of Firefox */
+    -ms-user-select: none;
+    /* Internet Explorer/Edge */
+    user-select: none;
+    /* Non-prefixed version, currently supported by Chrome, Opera and Firefox */
+}
+
+.selection{
+    fill: #ffffff;
+    stroke: #0072ce;
+    stroke-width: 1.5px;
+    fill-opacity: 0.5;
+}
+
+.currentLine{
+    stroke: darkgrey;
+}  
