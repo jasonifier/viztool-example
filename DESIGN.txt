@@ -1,0 +1,43 @@
+HOME PAGE
+- Display logo
+- Describe project and dataflow
+- TBD: connect to metrics results and display chart
+
+QUERY PAGE
+- STYLE: light background for text box areas
+- STYLE: rounded corners, shallow border for text boxes
+- One text box for primary query terms
+- One text box for secondary query terms
+- Date range picker for start and end dates (**required**)
+- Select datasets to query (**required**)
+- Query Name text box (include a default name)
+  - Note: queries to system will also append dataset selection names to each query
+- Review and Submit button (color: green)
+- Provide a query review modal after clicking above button
+  - Note: should display query syntax tied to each dataset
+  - Note: include light gray/blue "go back" button and a green "submit" button
+- Section displaying previous queries and metadata (make collapsable)
+  - Results page link (rowspan)
+  - Query name
+  - Dataset name
+  - Query datetime
+  - Executor UUID
+  - Query ID
+  - Link to other data GUI tool (always publish queries to the tool)
+
+TODO: Review progress bars and modals to work with the query page
+- https://www.w3schools.com/bootstrap4/bootstrap_progressbars.asp
+- https://www.w3schools.com/bootstrap4/tryit.asp?filename=trybs_progressbar2&stacked=h
+- https://www.w3schools.com/bootstrap4/bootstrap_modal.asp
+
+RESULTS PAGE(S)
+- use a collapsable sidebar to show what results and visualizations to use
+- https://www.w3schools.com/howto/howto_js_collapse_sidebar.asp
+- Each link in sidebar will take you to a different chart/table/graph etc.
+- Main page for each results set should provide metadata about the query performed
+- Provide a return to Query Page link at top right of page
+- Show the query syntax that generated results for the user
+
+ANALYSIS PAGE
+- use bootstrap 4 cards to showcase the various pivots or enrichments
+- include links to articles and resources in each card
