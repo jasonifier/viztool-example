@@ -54,9 +54,25 @@
                 </table>
                 <p>Note that we start the search in tbody, to prevent filtering the table headers.</p>
                 </div>
-                <div id="linkGraph" class="col-lg-7"></div>
+                <div class="col-lg-7">
+                    <div id="linkGraph"></div>
+                    <br>
+                    <span id="datepicker" style="display: none;">
+                        <strong>Choose a date:&nbsp;</strong>
+                        <input type="date" id="date" name="date">&nbsp;
+                        <button id="submit">Apply</button>
+                    </span>
+                </div>
             </div>
         </div>
         <script type="text/javascript" src="scripts/quicktable.js"></script>
+        <script>
+            document.getElementById("submit").addEventListener("click", function() {
+              var input = document.getElementById("date").value;
+              var dateEntered = new Date(input);
+              console.log(input);
+              console.log(dateEntered);
+            });
+        </script>
     </body>
 </html>

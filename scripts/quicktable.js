@@ -67,11 +67,19 @@ function buttonClick() {
         $("#loadingSpin").addClass("spinner-border spinner-border-sm");
         $("#linkGraph").empty();
         getTableData("data/testdata.json", processTableData);
-        fetchGraphData("data/ipdata.json");
+        // test new data file here
+        fetchGraphData("data/ticketdata.json");
         setTimeout(() => {
             $("#myButton").attr('class', 'btn btn-success').html(BUTTON);
           }, 2000);
     };
+    // toggle hide and show for the date picker
+    var datePicker = document.getElementById("datepicker");
+    if (datePicker.style.display === "none") {
+        datePicker.style.display = "inline";
+      } else {
+        datePicker.style.display = "none";
+      }
 };
 
 function buildTable(data) {
@@ -115,13 +123,17 @@ function buildTable(data) {
 
 function createViz(data) {
     console.log('Building link graph from dataset.');
+    // const customColors = [(blue), (red), (yellow), (green), (gray)];
+    const customColors = ["#013ee7", "#f51601", "#eee600", "#5d9f2d", "#555555"];
     chart = d3ForceGraph(data, {
         nodeId: d => d.id,
         nodeGroup: d => d.group,
-        nodeTitle: d => `Identifier: ${d.id}\nType: ${d.group}`,
-        nodeRadius: 8,
+        nodeTitle: d => d.text,
+        nodeRadius: 10,
+        nodeStrokeWidth: 2.0,
         linkStroke: "#000",
-        linkStrokeWidth: l => Math.sqrt(l.value),
+        linkStrokeWidth: 2.0,
+        colors: customColors,
         width: 600,
         height: 600
       });

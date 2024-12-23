@@ -1,0 +1,86 @@
+{
+  "nodes": [
+    {
+      "id": "547879",
+      "text": "User Id: 547879 \nName: David Webb \nEmail: iwebb8@yahoo.com \nStart Date: 2024-10-16 15:41:50 ",
+      "group": 1
+    },
+    {
+      "id": "194152",
+      "text": "User Id: 194152 \nName: Mr. Ronald Brown \nEmail: ronald14@yahoo.com \nStart Date: 2024-10-13 00:44:13 ",
+      "group": 1
+    },
+    {
+      "id": "502416",
+      "text": "User Id: 502416 \nName: Jeff Cobb \nEmail: greenjeffery@hotmail.com \nStart Date: 2024-10-08 01:55:56 ",
+      "group": 1
+    },
+    {
+      "id": "655563",
+      "text": "User Id: 655563 \nName: Jennifer Perez \nEmail: jperez@hotmail.com \nStart Date: 2024-10-09 20:20:01 ",
+      "group": 1
+    },
+    {
+      "id": "188287",
+      "text": "User Id: 188287 \nName: Michael Henderson \nEmail: michael58@yahoo.com \nStart Date: 2024-10-21 04:52:29 ",
+      "group": 1
+    },
+    {
+      "id": "4330522556171",
+      "text": "Method: credit_card \nValue: 4330522556171 \nFirst Activity Date: 2024-10-09 20:20:01 \nLast Activity Date: 2024-10-16 15:41:50 ",
+      "group": 2
+    },
+    {
+      "id": "ticket_WMJnCPXtnx",
+      "text": "Method: transfer \nValue: ticket_WMJnCPXtnx \nFirst Activity Date: 2024-10-18 20:25:01 \nLast Activity Date: 2024-10-22 18:53:45 ",
+      "group": 3
+    },
+    {
+      "id": "ticket_TipAgXvgHk",
+      "text": "Method: transfer \nValue: ticket_TipAgXvgHk \nFirst Activity Date: 2024-10-15 17:14:31 \nLast Activity Date: 2024-10-15 17:14:31 ",
+      "group": 3
+    }
+  ],
+  "links": [
+    {
+      "source": "547879",
+      "target": "4330522556171",
+      "timestamp": "2024-10-16 15:41:50"
+    },
+    {
+      "source": "4330522556171",
+      "target": "655563",
+      "timestamp": "2024-10-16 15:41:50"
+    },
+    {
+      "source": "547879",
+      "target": "ticket_WMJnCPXtnx",
+      "timestamp": "2024-10-18 20:25:01"
+    },
+    {
+      "source": "ticket_WMJnCPXtnx",
+      "target": "655563",
+      "timestamp": "2024-10-18 20:25:01"
+    },
+    {
+      "source": "194152",
+      "target": "ticket_TipAgXvgHk",
+      "timestamp": "2024-10-15 17:14:31"
+    },
+    {
+      "source": "ticket_TipAgXvgHk",
+      "target": "502416",
+      "timestamp": "2024-10-15 17:14:31"
+    },
+    {
+      "source": "655563",
+      "target": "ticket_WMJnCPXtnx",
+      "timestamp": "2024-10-22 18:53:45"
+    },
+    {
+      "source": "ticket_WMJnCPXtnx",
+      "target": "188287",
+      "timestamp": "2024-10-22 18:53:45"
+    }
+  ]
+}
