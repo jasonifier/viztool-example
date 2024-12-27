@@ -3,20 +3,22 @@ var chart;
 
 $(document).ready(function(){
     $("#myButton").on("click", buttonClick);
-    $("#submit").on("click", buttonApplyFunction);
+    $("#updateGraph").on("click", buttonUpdateFunction);
 });
 
-function buttonApplyFunction() {
-    var inputDate = $("#date").val();
-    var inputDatePadded = `${inputDate} 00:00:00`;
-    console.log(inputDatePadded);
+function buttonUpdateFunction() {
+    var startDate = $("#startDate").text();
+    var endDate = $("#endDate").text();
+    var startDatePadded = `${startDate} 00:00:00`;
+    var endDatePadded = `${endDate} 23:59:59`;
     const filteredDataset = filterGraph(
         {
             nodes: [...dataset.nodes],
             links: [...dataset.links]
         },
         {
-            timestamp: inputDatePadded
+            startTimestamp: startDatePadded,
+            endTimestamp: endDatePadded,
         }
     );
     console.log(filteredDataset);
@@ -24,8 +26,8 @@ function buttonApplyFunction() {
     createViz(filteredDataset);
 };
 
-function filterGraph({nodes, links}, {timestamp}) {
-    const filteredLinks = links.filter(link => link.timestamp > timestamp);
+function filterGraph({nodes, links}, {startTimestamp, endTimestamp}) {
+    const filteredLinks = links.filter(link => link.timestamp >= startTimestamp && link.timestamp <= endTimestamp);
     const newNodes = new Set();
     filteredLinks.forEach(function(e){
         newNodes.add(e.source);
@@ -123,7 +125,7 @@ function createViz(data) {
         linkStrokeWidth: 2.0,
         colors: customColors,
         width: 1200,
-        height: 700
+        height: 650
       });
     d3.select("#linkGraph").node().append(chart);
     $("#linkGraph").addClass("bg-light rounded border border-dark");
