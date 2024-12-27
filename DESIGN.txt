@@ -42,6 +42,13 @@ ANALYSIS PAGE
 - use bootstrap 4 cards to showcase the various pivots or enrichments
 - include links to articles and resources in each card
 
+
+let a = new Set([1,2,3])
+let b = new Set([1,2,4])
+let intersect = new Set([...a].filter(i => b.has(i)));
+console.log(...intersect)
+
+
 EXAMPLE (d3 graph filter question):
 
 Certainly! Filtering nodes and edges in a D3 force-directed graph can help you focus on specific parts of your data. Below is an example of how you can achieve this in JavaScript using D3.js:

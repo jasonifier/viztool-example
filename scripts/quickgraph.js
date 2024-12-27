@@ -8,9 +8,34 @@ $(document).ready(function(){
 
 function buttonApplyFunction() {
     var inputDate = $("#date").val();
-    var dateEntered = new Date(inputDate);
-    console.log(inputDate);
-    console.log(dateEntered);
+    var inputDatePadded = `${inputDate} 00:00:00`;
+    console.log(inputDatePadded);
+    const filteredDataset = filterGraph(
+        {
+            nodes: [...dataset.nodes],
+            links: [...dataset.links]
+        },
+        {
+            timestamp: inputDatePadded
+        }
+    );
+    console.log(filteredDataset);
+    $("#linkGraph").empty();
+    createViz(filteredDataset);
+};
+
+function filterGraph({nodes, links}, {timestamp}) {
+    const filteredLinks = links.filter(link => link.timestamp > timestamp);
+    const newNodes = new Set();
+    filteredLinks.forEach(function(e){
+        newNodes.add(e.source);
+        newNodes.add(e.target);
+    });
+    const filteredNodes = nodes.filter(node => newNodes.has(node.id));
+    return {
+        nodes: [...filteredNodes],
+        links: [...filteredLinks]
+    };
 };
 
 function readJsonFile(filepath) {
