@@ -2,6 +2,9 @@
 // Released under the ISC license.
 // https://observablehq.com/@d3/force-directed-graph
 
+// Initialize a variable to keep track of the previously selected element
+let previousElement = null;
+
 function d3ForceGraph({
   nodes, // an iterable of node objects (typically [{id}, …])
   links // an iterable of link objects (typically [{source, target}, …])
@@ -41,6 +44,7 @@ function d3ForceGraph({
   
 
   // Replace the input nodes and links with mutable objects for the simulation.
+  const graphNodes = [...nodes];
   nodes = d3.map(nodes, (_, i) => ({id: N[i]}));
   links = d3.map(links, (_, i) => ({source: LS[i], target: LT[i]}));
 
@@ -86,6 +90,17 @@ function d3ForceGraph({
     .data(nodes)
     .join("circle")
       .attr("r", nodeRadius)
+      .on("click", function(e, d){
+        const selectedNode = graphNodes.filter(n => n.id === d.id)[0];
+        createNodeViewList(selectedNode.text);
+        if (previousElement) {
+          d3.select(previousElement).style("stroke", nodeStroke);
+          d3.select(previousElement).style("stroke-width", nodeStrokeWidth);
+        }
+        previousElement = this;
+        d3.select(this).style("stroke", "black");
+        d3.select(this).style('stroke-width', 2.5);
+      })
       .call(drag(simulation));
 
   if (W) link.attr("stroke-width", ({index: i}) => W[i]);
@@ -127,6 +142,9 @@ function d3ForceGraph({
       if (!event.active) simulation.alphaTarget(0);
       event.subject.fx = null;
       event.subject.fy = null;
+      // if needed ...
+      // stop propagation to avoid "onclick" function
+      // event.stopPropagation();
     }
     
     return d3.drag()

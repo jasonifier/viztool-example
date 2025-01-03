@@ -62,7 +62,7 @@ function updateFunction() {
     console.log(filteredDataset);
     $("#linkGraph").empty();
     createViz(filteredDataset);
-    addFeatures();
+    $("#nodeBox").empty();
 };
 
 function createListItem(text){
@@ -73,6 +73,49 @@ function createListItem(text){
     return $listItem
 };
 
+function createNodeViewList(text){
+    $("#nodeBox").empty();
+    var $nodeList = $("<ul>", {
+        class: "list-group",
+        id: "nodeDetails"
+    });
+    const textCleaned = text.split("\n").map(
+        function(text){
+            const parts = text.split(': ');
+            const field = `<strong>${parts[0].trim()}</strong>`;
+            return `${field}: ${parts[1].trim()}`
+        }
+    );
+    for (idx in textCleaned) {
+        $nodeList.append(createListItem(textCleaned[idx]));
+    }
+    var $nodeSpan = $("<span>", {
+        html: "<br>Node Data View:<br>"
+    });
+    $nodeSpan.append($nodeList);
+    $("#nodeBox").append($nodeSpan);
+    var $lineBreak = $("<br>");
+    $("#nodeBox").append($lineBreak);
+
+    var $tableFilterButton = $("<button>", {
+        text: "Filter Table",
+        id: "nodeButton",
+        class: "btn btn-info",
+        type: "button"
+    });
+    $tableFilterButton.on("click", filterTableOnClick);
+    $("#nodeBox").append($tableFilterButton);
+    $("#nodeBox").removeAttr("style");
+    $("#nodeBox").attr("style", "display: inline;");
+};
+
+function filterTableOnClick() {
+    const details = $("#nodeDetails li");
+    const searchValue = details[1].innerHTML.split(":")[1].trim();
+    tableSearchFunction(searchValue);
+};
+
+/*
 function addFeatures(){
     $("#nodeBox").empty();
     var $nodeList = $("<ul>", {
@@ -101,7 +144,9 @@ function addFeatures(){
     $("#nodeBox").append($tableFilterButton);
     $("#nodeBox").removeAttr("style");
     $("#nodeBox").attr("style", "display: inline;");
+    console.log("add features");
 };
+*/
 
 function filterGraph({nodes, links}, {startTimestamp, endTimestamp}) {
     const filteredLinks = links.filter(link => link.timestamp >= startTimestamp && link.timestamp <= endTimestamp);
@@ -135,7 +180,6 @@ function readJsonFile(filepath) {
 async function fetchGraphData(filepath) {
     dataset = await readJsonFile(filepath);
     createViz(dataset);
-    addFeatures();
 };
 
 function getTableData(filepath, callback) {
@@ -165,7 +209,7 @@ function buttonClick() {
         $("#myButton").attr('class', 'btn text-light').append(LOADING);
         $("#loadingSpin").addClass("spinner-border spinner-border-sm");
         $("#linkGraph").empty();
-        getTableData("data/testdata.json", processTableData);
+        getTableData("data/ticketdata.json", processTableData);
         // test new data file here
         fetchGraphData("data/ticketdata.json");
         setTimeout(() => {
@@ -218,11 +262,6 @@ function createViz(data) {
 };
 
 function buildTable(data) {
-    const header_begin = '<thead><tr><th><strong>NAME</strong></th>';
-    const header_end   = '<th><strong>EMAIL</strong></th></tr></thead>';
-    var header = header_begin + header_end;
-    console.log('Building table from dataset.');
-
     // add styling to table
     var tableClassArray = [
         'table',
@@ -235,17 +274,21 @@ function buildTable(data) {
         $("#htmlTable").addClass(value);
     });
 
-    // add table row data
-    var html_text = '';
-    $.each(data, function(_, value) {
-        html_text += '<tr>';
-        for (var key in value) {
-            html_text += '<td>' + value[key] + '</td>';
-        }
-        html_text += '</tr>';
-    });
-    $('#dataTable').empty();
+    const nodeLookup = new Object();
+    for (i in data.nodes) {
+        nodeLookup[data.nodes[i].id] = data.nodes[i].text;
+    };
 
+    var html_text = '';
+    $.each(data.links, function(_, link) {
+        const srcText = nodeLookup[link.source].replaceAll("\n", "<br>");
+        html_text += '<tr><td>' + srcText + '</td>';
+        html_text += '<td>' + link.timestamp + '</td>';
+        const dstText = nodeLookup[link.target].replaceAll("\n", "<br>");
+        html_text += '<td>' + dstText + '</td></tr>';
+    });
+
+    $('#dataTable').empty();
     setTimeout(() => {
         $('#dataTable').append(html_text);
       }, 1000);

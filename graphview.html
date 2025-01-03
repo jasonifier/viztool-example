@@ -12,6 +12,7 @@
     <script type="text/javascript" src="lib/moment.min.js"></script>
     <script type="text/javascript" src="lib/daterangepicker.js"></script>
     <script type="text/javascript" src="lib/d3.v6.min.js"></script>
+    <script type="text/javascript" src="scripts/quickgraph.js"></script>
     <script type="text/javascript" src="scripts/forcegraph.js"></script>
     </head>
     <body class="bg-secondary">
@@ -40,14 +41,15 @@
                 </div>
             </div>
             <div id="myTableDiv" class="row m-3" style="display: none;">
-                <p>Type something in the input field to search the table for first names, last names or emails:</p>  
+                <p>Type something in the input field to search the table for first names, last names, emails, or other identifiers:</p>  
                 <input class="form-control bg-dark text-light" id="searchBar" type="text" placeholder="Search..">
                 <br>
                 <table id="htmlTable">
                     <thead id="headerTable" class="text-hide">
                         <tr>
-                            <th><strong>NAME</strong></th>
-                            <th><strong>EMAIL</strong></th>
+                            <th><strong>SOURCE</strong></th>
+                            <th><strong>TIMESTAMP</strong></th>
+                            <th><strong>TARGET</strong></th>
                         </tr>
                     </thead>
                     <tbody id="dataTable">
@@ -55,6 +57,5 @@
                 </table>
             </div>
         </div>
-        <script type="text/javascript" src="scripts/quickgraph.js"></script>
     </body>
 </html>
