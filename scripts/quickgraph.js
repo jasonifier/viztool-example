@@ -1,5 +1,12 @@
 var dataset;
 var chart;
+const colorMapping = [
+    {group: 1, color: "#013ee7"},
+    {group: 2, color: "#f51601"},
+    {group: 3, color: "#eee600"},
+    {group: 4, color: "#5d9f2d"},
+    {group: 5, color: "#555555"}
+];
 
 $(document).ready(function(){
     $("#myButton").on("click", buttonClick);
@@ -112,9 +119,23 @@ function buttonClick() {
 };
 
 function createViz(data) {
-    console.log('Building link graph from dataset.');
-    // const customColors = [(blue), (red), (yellow), (green), (gray)];
-    const customColors = ["#013ee7", "#f51601", "#eee600", "#5d9f2d", "#555555"];
+    // console.log('Building link graph from dataset.');
+    const customColors = new Array();
+    // select appropriate colors for display of nodes
+    const groups = new Set();
+    data.nodes.forEach(v => groups.add(v.group));
+    const groupArray = Array.from(groups);
+    // sort in ascending order and get colors from mapping
+    groupArray.sort((a, b) => a - b);
+    groupArray.forEach(function(g){
+        for (idx in colorMapping) {
+            const m = colorMapping[idx];
+            if (m.group === g){
+                customColors.push(m.color);
+            };
+        }
+    });
+    // create and display d3 chart
     chart = d3ForceGraph(data, {
         nodeId: d => d.id,
         nodeGroup: d => d.group,
