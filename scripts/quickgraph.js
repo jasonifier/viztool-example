@@ -10,10 +10,25 @@ const colorMapping = [
 
 $(document).ready(function(){
     $("#myButton").on("click", buttonClick);
-    $("#updateGraph").on("click", buttonUpdateFunction);
+    // $("#updateGraph").on("click", buttonUpdateFunction);
+    $('input[name="datefilter"]').daterangepicker({
+        autoUpdateInput: false,
+        locale: {
+            cancelLabel: 'Clear'
+        }
+    });
+    $('input[name="datefilter"]').on('apply.daterangepicker', function(e, picker) {
+        $(this).val(picker.startDate.format('MM/DD/YYYY') + ' - ' + picker.endDate.format('MM/DD/YYYY'));
+        document.getElementById("startDate").innerHTML = picker.startDate.format("YYYY-MM-DD").toString();
+        document.getElementById("endDate").innerHTML = picker.endDate.format("YYYY-MM-DD").toString();
+        updateFunction();
+    });
+    $('input[name="datefilter"]').on('cancel.daterangepicker', function(e, picker) {
+        $(this).val("Select a Date Range ...");
+    });
 });
 
-function buttonUpdateFunction() {
+function updateFunction() {
     var startDate = $("#startDate").text();
     var endDate = $("#endDate").text();
     var startDatePadded = `${startDate} 00:00:00`;
@@ -31,6 +46,44 @@ function buttonUpdateFunction() {
     console.log(filteredDataset);
     $("#linkGraph").empty();
     createViz(filteredDataset);
+    addFeatures();
+};
+
+function createListItem(text){
+    var $listItem = $("<li>", {
+        html: `${text}`,
+        class: "list-group-item list-group-item-light"
+    });
+    return $listItem
+};
+
+function addFeatures(){
+    $("#nodeBox").empty();
+    var $nodeList = $("<ul>", {
+        class: "list-group"
+    });
+    $nodeList.append(createListItem("<strong>test 1</strong>"));
+    $nodeList.append(createListItem("test 2"));
+    $nodeList.append(createListItem("test 3"));
+
+    var $nodeSpan = $("<span>", {
+        html: "<br>Node Data View:<br>",
+        id: "nodeDetails"
+    });
+    $nodeSpan.append($nodeList);
+    $("#nodeBox").append($nodeSpan);
+    var $lineBreak = $("<br>");
+    $("#nodeBox").append($lineBreak);
+
+    var $tableFilterButton = $("<button>", {
+        text: "Filter Table",
+        id: "nodeButton",
+        class: "btn btn-info",
+        type: "button"
+    });
+    $("#nodeBox").append($tableFilterButton);
+    $("#nodeBox").removeAttr("style");
+    $("#nodeBox").attr("style", "display: inline;");
 };
 
 function filterGraph({nodes, links}, {startTimestamp, endTimestamp}) {
@@ -89,6 +142,7 @@ async function fetchGraphData(filepath) {
     dataset = await readJsonFile(filepath);
     console.log("Finished HTTP request for JSON file. [2]");
     createViz(dataset);
+    addFeatures();
 };
 
 function buttonClick() {
@@ -109,13 +163,15 @@ function buttonClick() {
             $("#myButton").attr('class', 'btn btn-success').html(BUTTON);
           }, 2000);
     };
-    // toggle hide and show for the date picker
+    // show for the date picker and node box
     var datePicker = document.getElementById("datepicker");
     if (datePicker.style.display === "none") {
         datePicker.style.display = "inline";
-      } else {
-        datePicker.style.display = "none";
-      }
+    };
+    // var nodeBox = document.getElementById("nodeBox");
+    // if (nodeBox.style.display === "none") {
+    //     nodeBox.style.display = "inline";
+    // };
 };
 
 function createViz(data) {
@@ -145,8 +201,8 @@ function createViz(data) {
         linkStroke: "#000",
         linkStrokeWidth: 2.0,
         colors: customColors,
-        width: 1200,
-        height: 650
+        width: 1250,
+        height: 500
       });
     d3.select("#linkGraph").node().append(chart);
     $("#linkGraph").addClass("bg-light rounded border border-dark");

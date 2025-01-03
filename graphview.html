@@ -16,23 +16,8 @@
     </head>
     <body class="bg-secondary">
         <div class="container-fluid text-center text-light p-1">Welcome to My Application, GraphTool!</div>
-        <div class="container-fluid bg-dark">
-          <ul class="nav nav-tabs bg-dark border-bottom-0">
-            <li class="nav-item">
-                <a class="nav-link text-light" href="./images.html">Home</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link bg-info active" href="#">Import Data</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link disabled" href="#">Query (Coming Soon)</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link disabled" href="#">Results (Coming Soon)</a>
-              </li>
-          </ul>
-        </div>
-        <div class="container p-0 text-light">
+        <div class="container-fluid bg-dark"><br></div>
+        <div class="container-fluid p-0 text-light">
             <div class="row m-3">
                 <div class="col-sm-6">
                     <button id="myButton" type="button" class="btn btn-success">Import Data</button>
@@ -40,41 +25,24 @@
                 </div>
             </div>
             <div class="row m-3">
-                <div class="col-lg-12">
+                <div id="graphPanel" class="col-lg-3">
                     <span id="datepicker" style="display: none;">
                         <label for="datefilter">Date Range:</label>
-                        <input type="text" name="datefilter" id="datefilter" value="Select a Date Range ..." style="width:25%;">
-                        <span><button id="updateGraph" type="button" class="btn btn-info">Update Graph</button></span>
+                        <input type="text" name="datefilter" id="datefilter" value="Select a Date Range ..." style="width:100%;">
                     </span>
-                    <br>
                     <span id="startDate" style="display: none;"></span>
                     <span id="endDate" style="display: none;"></span>
+                    <br>
+                    <span id="nodeBox" style="display: none;"></span>
+                </div>
+                <div class="col-lg-9">
                     <div id="linkGraph"></div>
                 </div>
             </div>
+            <div class="row m-3">
+
+            </div>
         </div>
         <script type="text/javascript" src="scripts/quickgraph.js"></script>
-        <script type="text/javascript">
-            $(function() {
-
-            $('input[name="datefilter"]').daterangepicker({
-                autoUpdateInput: false,
-                locale: {
-                    cancelLabel: 'Clear'
-                }
-            });
-
-            $('input[name="datefilter"]').on('apply.daterangepicker', function(e, picker) {
-                $(this).val(picker.startDate.format('MM/DD/YYYY') + ' - ' + picker.endDate.format('MM/DD/YYYY'));
-                document.getElementById("startDate").innerHTML = picker.startDate.format("YYYY-MM-DD").toString();
-                document.getElementById("endDate").innerHTML = picker.endDate.format("YYYY-MM-DD").toString();
-            });
-
-            $('input[name="datefilter"]').on('cancel.daterangepicker', function(e, picker) {
-                $(this).val('');
-            });
-
-            });
-        </script>
     </body>
 </html>
