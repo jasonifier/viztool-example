@@ -10,6 +10,7 @@ const colorMapping = [
 
 $(document).ready(function(){
     $("#myButton").on("click", buttonClick);
+    $("#searchBar").on("keyup", searchBarFunction);
     // $("#updateGraph").on("click", buttonUpdateFunction);
     $('input[name="datefilter"]').daterangepicker({
         autoUpdateInput: false,
@@ -27,6 +28,21 @@ $(document).ready(function(){
         $(this).val("Select a Date Range ...");
     });
 });
+
+function searchBarFunction() {
+    var value = $(this).val().toLowerCase();
+    $("#dataTable tr").filter(function() {
+        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
+};
+
+function tableSearchFunction(text) {
+    $("#searchBar").val(text);
+    var value = text.toLowerCase();
+    $("#dataTable tr").filter(function() {
+        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
+};
 
 function updateFunction() {
     var startDate = $("#startDate").text();
@@ -81,6 +97,7 @@ function addFeatures(){
         class: "btn btn-info",
         type: "button"
     });
+    $tableFilterButton.on("click", function(){tableSearchFunction("john")});
     $("#nodeBox").append($tableFilterButton);
     $("#nodeBox").removeAttr("style");
     $("#nodeBox").attr("style", "display: inline;");
@@ -115,7 +132,12 @@ function readJsonFile(filepath) {
     return p;
 };
 
-/*
+async function fetchGraphData(filepath) {
+    dataset = await readJsonFile(filepath);
+    createViz(dataset);
+    addFeatures();
+};
+
 function getTableData(filepath, callback) {
     var client = new XMLHttpRequest();
     client.overrideMimeType("application/json");
@@ -131,19 +153,6 @@ function getTableData(filepath, callback) {
 function processTableData(client) {
     buildTable(JSON.parse(client.responseText));
 }
-*/
-
-async function fetchGraphData(filepath) {
-    // console.log("Starting HTTP request for JSON file. [1]");
-    // dataset = await readJsonFile("data/testdata.json");
-    // console.log("Finished HTTP request for JSON file. [1]");
-    // buildTable(dataset);
-    console.log("Starting HTTP request for JSON file. [2]");
-    dataset = await readJsonFile(filepath);
-    console.log("Finished HTTP request for JSON file. [2]");
-    createViz(dataset);
-    addFeatures();
-};
 
 function buttonClick() {
     $("#myButton").toggleClass("btn-success");
@@ -156,7 +165,7 @@ function buttonClick() {
         $("#myButton").attr('class', 'btn text-light').append(LOADING);
         $("#loadingSpin").addClass("spinner-border spinner-border-sm");
         $("#linkGraph").empty();
-        // getTableData("data/testdata.json", processTableData);
+        getTableData("data/testdata.json", processTableData);
         // test new data file here
         fetchGraphData("data/ticketdata.json");
         setTimeout(() => {
@@ -206,4 +215,46 @@ function createViz(data) {
       });
     d3.select("#linkGraph").node().append(chart);
     $("#linkGraph").addClass("bg-light rounded border border-dark");
+};
+
+function buildTable(data) {
+    const header_begin = '<thead><tr><th><strong>NAME</strong></th>';
+    const header_end   = '<th><strong>EMAIL</strong></th></tr></thead>';
+    var header = header_begin + header_end;
+    console.log('Building table from dataset.');
+
+    // add styling to table
+    var tableClassArray = [
+        'table',
+        'table-bordered',
+        'table-striped',
+        'table-hover',
+        'table-dark'
+    ];
+    $.each(tableClassArray, function(_, value) {
+        $("#htmlTable").addClass(value);
+    });
+
+    // add table row data
+    var html_text = '';
+    $.each(data, function(_, value) {
+        html_text += '<tr>';
+        for (var key in value) {
+            html_text += '<td>' + value[key] + '</td>';
+        }
+        html_text += '</tr>';
+    });
+    $('#dataTable').empty();
+
+    setTimeout(() => {
+        $('#dataTable').append(html_text);
+      }, 1000);
+
+    // show the table header
+    if ($("#headerTable").attr('class') === 'text-hide') {
+        $("#headerTable").attr('class', 'text-left');
+    };
+
+    // show the entire div by removing display:none style
+    $("#myTableDiv").removeAttr("style");
 };

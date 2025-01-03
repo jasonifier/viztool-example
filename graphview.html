@@ -39,8 +39,20 @@
                     <div id="linkGraph"></div>
                 </div>
             </div>
-            <div class="row m-3">
-
+            <div id="myTableDiv" class="row m-3" style="display: none;">
+                <p>Type something in the input field to search the table for first names, last names or emails:</p>  
+                <input class="form-control bg-dark text-light" id="searchBar" type="text" placeholder="Search..">
+                <br>
+                <table id="htmlTable">
+                    <thead id="headerTable" class="text-hide">
+                        <tr>
+                            <th><strong>NAME</strong></th>
+                            <th><strong>EMAIL</strong></th>
+                        </tr>
+                    </thead>
+                    <tbody id="dataTable">
+                    </tbody>
+                </table>
             </div>
         </div>
         <script type="text/javascript" src="scripts/quickgraph.js"></script>
