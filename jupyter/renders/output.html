@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+    <title>Jinja D3 Graph Example</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+    </head>
+    <body class="bg-secondary">
+        <div class="container-fluid text-center text-light p-1">Welcome to My Application, GraphTool!</div>
+        <div class="container-fluid bg-dark">
+          <ul class="nav nav-tabs bg-dark border-bottom-0">
+            <li class="nav-item">
+                <!-- <a class="nav-link text-light" href="./images.html">Home</a> -->
+                <a class="nav-link text-light" href="#">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link bg-info active" href="#">Import Data</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link disabled" href="#">Query (Coming Soon)</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link disabled" href="#">Results (Coming Soon)</a>
+              </li>
+          </ul>
+        </div>
+        <div class="container p-0 text-light">
+            <div class="row m-3">
+                <div class="col-sm-6">
+                    <button id="myButton" type="button" class="btn btn-success">Import Data</button>
+                    <span class="ml-2">Click here to import the sample dataset</span>
+                </div>
+            </div>
+            <div class="row m-3">
+                <div class="col-lg-12">
+                    <h2>Link Graph</h2>
+                    <div id="linkGraph"></div>
+                </div>
+            </div>
+        </div>
+        <script type="text/javascript">
+            var dataset;
+            var chart;
+            const colorMapping = [
+                {group: 1, color: "#013ee7"},
+                {group: 2, color: "#f51601"},
+                {group: 3, color: "#eee600"},
+                {group: 4, color: "#5d9f2d"},
+                {group: 5, color: "#555555"}
+            ];
+
+            $(document).ready(function(){
+                $("#myButton").on("click", buttonClick);
+                dataset = {"links": [{"source": "547879", "target": "4330522556171", "timestamp": "2024-10-16 15:41:50"}, {"source": "4330522556171", "target": "655563", "timestamp": "2024-10-16 15:41:50"}, {"source": "547879", "target": "ticket_WMJnCPXtnx", "timestamp": "2024-10-18 20:25:01"}, {"source": "ticket_WMJnCPXtnx", "target": "655563", "timestamp": "2024-10-18 20:25:01"}, {"source": "194152", "target": "ticket_TipAgXvgHk", "timestamp": "2024-10-15 17:14:31"}, {"source": "ticket_TipAgXvgHk", "target": "502416", "timestamp": "2024-10-15 17:14:31"}, {"source": "655563", "target": "ticket_WMJnCPXtnx", "timestamp": "2024-10-22 18:53:45"}, {"source": "ticket_WMJnCPXtnx", "target": "188287", "timestamp": "2024-10-22 18:53:45"}], "nodes": [{"group": 1, "id": "547879", "text": "User Id: 547879 \nName: David Webb \nEmail: iwebb8@yahoo.com \nStart Date: 2024-10-16 15:41:50 "}, {"group": 1, "id": "194152", "text": "User Id: 194152 \nName: Mr. Ronald Brown \nEmail: ronald14@yahoo.com \nStart Date: 2024-10-13 00:44:13 "}, {"group": 1, "id": "502416", "text": "User Id: 502416 \nName: Jeff Cobb \nEmail: greenjeffery@hotmail.com \nStart Date: 2024-10-08 01:55:56 "}, {"group": 1, "id": "655563", "text": "User Id: 655563 \nName: Jennifer Perez \nEmail: jperez@hotmail.com \nStart Date: 2024-10-09 20:20:01 "}, {"group": 1, "id": "188287", "text": "User Id: 188287 \nName: Michael Henderson \nEmail: michael58@yahoo.com \nStart Date: 2024-10-21 04:52:29 "}, {"group": 2, "id": "4330522556171", "text": "Method: credit_card \nValue: 4330522556171 \nFirst Activity Date: 2024-10-09 20:20:01 \nLast Activity Date: 2024-10-16 15:41:50 "}, {"group": 3, "id": "ticket_WMJnCPXtnx", "text": "Method: transfer \nValue: ticket_WMJnCPXtnx \nFirst Activity Date: 2024-10-18 20:25:01 \nLast Activity Date: 2024-10-22 18:53:45 "}, {"group": 3, "id": "ticket_TipAgXvgHk", "text": "Method: transfer \nValue: ticket_TipAgXvgHk \nFirst Activity Date: 2024-10-15 17:14:31 \nLast Activity Date: 2024-10-15 17:14:31 "}]};
+            });
+
+            function buttonClick() {
+                $("#myButton").toggleClass("btn-success");
+                const text = $("#myButton").text();
+                const SPAN_HTML = "<span id=loadingSpin></span>";
+                const LOADING = " Loading ... ";
+                const BUTTON  = "Import Data";
+                if (text === BUTTON){
+                    $("#myButton").empty().append(SPAN_HTML);
+                    $("#myButton").attr('class', 'btn text-light').append(LOADING);
+                    $("#loadingSpin").addClass("spinner-border spinner-border-sm");
+                    $("#linkGraph").empty();
+                    createViz(dataset);
+                    setTimeout(() => {
+                        $("#myButton").attr('class', 'btn btn-success').html(BUTTON);
+                    }, 2000);
+                };
+            };
+
+            function createViz(data) {
+                // console.log('Building link graph from dataset.');
+                const customColors = new Array();
+                // select appropriate colors for display of nodes
+                const groups = new Set();
+                data.nodes.forEach(v => groups.add(v.group));
+                const groupArray = Array.from(groups);
+                // sort in ascending order and get colors from mapping
+                groupArray.sort((a, b) => a - b);
+                groupArray.forEach(function(g){
+                    for (idx in colorMapping) {
+                        const m = colorMapping[idx];
+                        if (m.group === g){
+                            customColors.push(m.color);
+                        };
+                    }
+                });
+                // create and display d3 chart
+                chart = d3ForceGraph(data, {
+                    nodeId: d => d.id,
+                    nodeGroup: d => d.group,
+                    nodeTitle: d => d.text,
+                    nodeRadius: 10,
+                    nodeStrokeWidth: 2.0,
+                    linkStroke: "#000",
+                    linkStrokeWidth: 2.0,
+                    colors: customColors,
+                    width: 1250,
+                    height: 500
+                });
+                d3.select("#linkGraph").node().append(chart);
+                $("#linkGraph").addClass("bg-light rounded border border-dark");
+            };
+
+            // Copyright 2021-2024 Observable, Inc.
+            // Released under the ISC license.
+            // https://observablehq.com/@d3/force-directed-graph
+
+            // Initialize a variable to keep track of the previously selected element
+            let previousElement = null;
+
+            function d3ForceGraph({
+              nodes, // an iterable of node objects (typically [{id}, …])
+              links // an iterable of link objects (typically [{source, target}, …])
+            }, {
+              nodeId = d => d.id, // given d in nodes, returns a unique identifier (string)
+              nodeGroup, // given d in nodes, returns an (ordinal) value for color
+              nodeGroups, // an array of ordinal values representing the node groups
+              nodeTitle, // given d in nodes, a title string
+              nodeFill = "currentColor", // node stroke fill (if not using a group color encoding)
+              nodeStroke = "#fff", // node stroke color
+              nodeStrokeWidth = 1.5, // node stroke width, in pixels
+              nodeStrokeOpacity = 1, // node stroke opacity
+              nodeRadius = 5, // node radius, in pixels
+              nodeStrength,
+              linkSource = ({source}) => source, // given d in links, returns a node identifier string
+              linkTarget = ({target}) => target, // given d in links, returns a node identifier string
+              linkStroke = "#000", // link stroke color
+              linkStrokeOpacity = 0.3, // link stroke opacity
+              linkStrokeWidth = 3.0, // given d in links, returns a stroke width in pixels
+              linkStrokeLinecap = "round", // link stroke linecap
+              linkStrength,
+              colors = d3.schemeTableau10, // an array of color strings, for the node groups
+              width = 640, // outer width, in pixels
+              height = 400, // outer height, in pixels
+              invalidation // when this promise resolves, stop the simulation
+            } = {}) {
+            // Compute values.
+            const N = d3.map(nodes, nodeId).map(intern);
+            const R = typeof nodeRadius !== "function" ? null : d3.map(nodes, nodeRadius);
+            const LS = d3.map(links, linkSource).map(intern);
+            const LT = d3.map(links, linkTarget).map(intern);
+            if (nodeTitle === undefined) nodeTitle = (_, i) => N[i];
+            const T = nodeTitle == null ? null : d3.map(nodes, nodeTitle);
+            const G = nodeGroup == null ? null : d3.map(nodes, nodeGroup).map(intern);
+            const W = typeof linkStrokeWidth !== "function" ? null : d3.map(links, linkStrokeWidth);
+            const L = typeof linkStroke !== "function" ? null : d3.map(links, linkStroke);
+            
+
+            // Replace the input nodes and links with mutable objects for the simulation.
+            const graphNodes = [...nodes];
+            nodes = d3.map(nodes, (_, i) => ({id: N[i]}));
+            links = d3.map(links, (_, i) => ({source: LS[i], target: LT[i]}));
+
+            // Compute default domains.
+            if (G && nodeGroups === undefined) nodeGroups = d3.sort(G);
+
+            // Construct the scales.
+            const color = nodeGroup == null ? null : d3.scaleOrdinal(nodeGroups, colors);
+
+            // Construct the forces.
+            const forceNode = d3.forceManyBody();
+            const forceLink = d3.forceLink(links).id(({index: i}) => N[i]);
+            if (nodeStrength !== undefined) forceNode.strength(nodeStrength);
+            if (linkStrength !== undefined) forceLink.strength(linkStrength);
+
+            const simulation = d3.forceSimulation(nodes)
+                .force("link", forceLink)
+                .force("charge", forceNode)
+                .force("center",  d3.forceCenter())
+                .on("tick", ticked);
+
+            const svg = d3.create("svg")
+                .attr("width", width)
+                .attr("height", height)
+                .attr("viewBox", [-width / 2, -height / 2, width, height])
+                .attr("style", "max-width: 100%; height: auto; height: intrinsic;");
+
+            const link = svg.append("g")
+                .attr("stroke", typeof linkStroke !== "function" ? linkStroke : null)
+                .attr("stroke-opacity", linkStrokeOpacity)
+                .attr("stroke-width", typeof linkStrokeWidth !== "function" ? linkStrokeWidth : null)
+                .attr("stroke-linecap", linkStrokeLinecap)
+                .selectAll("line")
+                .data(links)
+                .join("line");
+
+            const node = svg.append("g")
+                .attr("fill", nodeFill)
+                .attr("stroke", nodeStroke)
+                .attr("stroke-opacity", nodeStrokeOpacity)
+                .attr("stroke-width", nodeStrokeWidth)
+                .selectAll("circle")
+                .data(nodes)
+                .join("circle")
+                .attr("r", nodeRadius)
+                .on("click", function(e, d){
+                    const selectedNode = graphNodes.filter(n => n.id === d.id)[0];
+                    // createNodeViewList(selectedNode.text);
+                    if (previousElement) {
+                    d3.select(previousElement).style("stroke", nodeStroke);
+                    d3.select(previousElement).style("stroke-width", nodeStrokeWidth);
+                    }
+                    previousElement = this;
+                    d3.select(this).style("stroke", "black");
+                    d3.select(this).style('stroke-width', 2.5);
+                })
+                .call(drag(simulation));
+
+            if (W) link.attr("stroke-width", ({index: i}) => W[i]);
+            if (L) link.attr("stroke", ({index: i}) => L[i]);
+            if (G) node.attr("fill", ({index: i}) => color(G[i]));
+            if (R) node.attr("r", ({index: i}) => R[i]);
+            if (T) node.append("title").text(({index: i}) => T[i]);
+            if (invalidation != null) invalidation.then(() => simulation.stop());
+
+            function intern(value) {
+                return value !== null && typeof value === "object" ? value.valueOf() : value;
+            }
+
+            function ticked() {
+                link
+                .attr("x1", d => d.source.x)
+                .attr("y1", d => d.source.y)
+                .attr("x2", d => d.target.x)
+                .attr("y2", d => d.target.y);
+
+                node
+                .attr("cx", d => d.x)
+                .attr("cy", d => d.y);
+            }
+
+            function drag(simulation) {    
+                function dragstarted(event) {
+                if (!event.active) simulation.alphaTarget(0.3).restart();
+                event.subject.fx = event.subject.x;
+                event.subject.fy = event.subject.y;
+                }
+                
+                function dragged(event) {
+                event.subject.fx = event.x;
+                event.subject.fy = event.y;
+                }
+                
+                function dragended(event) {
+                if (!event.active) simulation.alphaTarget(0);
+                event.subject.fx = null;
+                event.subject.fy = null;
+                // if needed ...
+                // stop propagation to avoid "onclick" function
+                // event.stopPropagation();
+                }
+                
+                return d3.drag()
+                .on("start", dragstarted)
+                .on("drag", dragged)
+                .on("end", dragended);
+            }
+
+            return Object.assign(svg.node(), {scales: {color}});
+            };
+        </script>
+    </body>
+</html>

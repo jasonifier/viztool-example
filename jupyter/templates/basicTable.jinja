@@ -61,12 +61,7 @@
             $(document).ready(function(){
                 $("#myButton").on("click", buttonClick);
                 $("#searchBar").on("keyup", searchBarFunction);
-                tableData = [
-                    {"name": "John Doe", "email": "john@example.com"},
-                    {"name": "Mary Moe", "email": "mary@hotmail.com"},
-                    {"name": "July Dooley", "email": "july@greatemail.com"},
-                    {"name": "Anja Ravendale", "email": "a_raven@proton.co.uk"}
-                ];
+                tableData = {{ data|tojson|safe }};
             });
 
             function searchBarFunction() {
