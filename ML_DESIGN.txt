@@ -1,0 +1,22 @@
+NER involves the identification of key information in the text and classification into a set of predefined categories.
+
+At its core, NLP is just a two-step process, below are the two steps that are involved:
+
+ - Detecting the entities from the text
+ - Classifying them into different categories
+
+System algorithm:
+
+1. analyses the entire input text to identify and locate the named entities
+2. identifies the sentence (context) boundaries by considering capitalization rules
+3. trained to classify entire documents into different types, such as invoices, receipts, or passports
+4. employs machine learning algorithms, including supervised learning, to analyze labeled datasets
+5. multiple training iterations, the model refines its understanding of contextual features, syntactic structures, and entity patterns, continuously improving its accuracy over time
+
+
+https://www.geeksforgeeks.org/named-entity-recognition/
+https://www.askpython.com/python-modules/gensim-word2vec
+
+Word2Vec
+- improving context with word embeddings
+- use negative sampling to speed up training of word embedding model
